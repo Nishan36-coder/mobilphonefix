@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://mobilphonefix.com/sitemap.xml
