@@ -1,0 +1,189 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { CATEGORIES, BRANDS, MODELS, REPAIRS } from '../data/repairData';
+
+const AdminContext = createContext();
+
+export const AdminProvider = ({ children }) => {
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+
+    // Website Content State
+    const [siteContent, setSiteContent] = useState(() => {
+        const saved = localStorage.getItem('site_content');
+        return saved ? JSON.parse(saved) : {
+            heroTitle: 'Reliable Certified Phone Repair',
+            heroSubtitle: 'Professional repair for your electronic devices. We bring your tech back to life with quality parts and expert service.',
+            servicesTitle: 'Our Services',
+            servicesSubtitle: 'We specialize in professional repairs for all your favorite devices. From screen replacements to battery upgrades.',
+            howItWorksTitle: 'How It Works',
+            sectionOrder: ['home', 'booking', 'services', 'how-it-works']
+        };
+    });
+
+    // Repair Data State
+    const [repairData, setRepairData] = useState(() => {
+        const saved = localStorage.getItem('repair_data_v3');
+        return saved ? JSON.parse(saved) : {
+            brands: BRANDS,
+            models: MODELS,
+            repairs: REPAIRS
+        };
+    });
+
+    // Availability Management State
+    const [availability, setAvailability] = useState(() => {
+        const saved = localStorage.getItem('availability_data');
+        return saved ? JSON.parse(saved) : {
+            timeSlots: [
+                '9:00 AM - 11:00 AM',
+                '11:00 AM - 1:00 PM',
+                '1:00 PM - 3:00 PM',
+                '3:00 PM - 5:00 PM'
+            ],
+            disabledDates: [], // Array of date strings in YYYY-MM-DD format
+            customSchedule: {} // { 'YYYY-MM-DD': ['9:00 AM - 11:00 AM', ...] }
+        };
+    });
+
+    // Persistence
+    useEffect(() => {
+        localStorage.setItem('site_content', JSON.stringify(siteContent));
+    }, [siteContent]);
+
+    useEffect(() => {
+        localStorage.setItem('repair_data_v3', JSON.stringify(repairData));
+    }, [repairData]);
+
+    useEffect(() => {
+        localStorage.setItem('availability_data', JSON.stringify(availability));
+    }, [availability]);
+
+    const updateContent = (key, value) => {
+        setSiteContent(prev => ({ ...prev, [key]: value }));
+    };
+
+    const updateSectionOrder = (newOrder) => {
+        setSiteContent(prev => ({ ...prev, sectionOrder: newOrder }));
+    };
+
+    // Availability Management Functions
+    const addTimeSlot = (timeSlot) => {
+        setAvailability(prev => ({
+            ...prev,
+            timeSlots: [...prev.timeSlots, timeSlot]
+        }));
+    };
+
+    const removeTimeSlot = (timeSlot) => {
+        setAvailability(prev => ({
+            ...prev,
+            timeSlots: prev.timeSlots.filter(slot => slot !== timeSlot)
+        }));
+    };
+
+    const toggleDateAvailability = (dateString) => {
+        setAvailability(prev => {
+            const isDisabled = prev.disabledDates.includes(dateString);
+            return {
+                ...prev,
+                disabledDates: isDisabled
+                    ? prev.disabledDates.filter(d => d !== dateString)
+                    : [...prev.disabledDates, dateString]
+            };
+        });
+    };
+
+    const setCustomTimeSlots = (dateString, timeSlots) => {
+        setAvailability(prev => ({
+            ...prev,
+            customSchedule: {
+                ...prev.customSchedule,
+                [dateString]: timeSlots
+            }
+        }));
+    };
+
+    const getAvailableTimeSlots = (dateString) => {
+        // Check if date is disabled
+        if (availability.disabledDates.includes(dateString)) {
+            return [];
+        }
+        // Return custom schedule if exists, otherwise default time slots
+        return availability.customSchedule[dateString] || availability.timeSlots;
+    };
+
+    const isDateAvailable = (dateString) => {
+        return !availability.disabledDates.includes(dateString);
+    };
+
+    const addBrand = (category, brandName) => {
+        setRepairData(prev => {
+            const newBrands = { ...prev.brands };
+            if (!newBrands[category].includes(brandName)) {
+                newBrands[category] = [...newBrands[category], brandName];
+            }
+            return { ...prev, brands: newBrands };
+        });
+    };
+
+    const deleteBrand = (category, brandName) => {
+        setRepairData(prev => {
+            const newBrands = { ...prev.brands };
+            newBrands[category] = newBrands[category].filter(b => b !== brandName);
+            return { ...prev, brands: newBrands };
+        });
+    };
+
+    const addModel = (brand, category, modelName) => {
+        setRepairData(prev => {
+            const newModels = { ...prev.models };
+            if (!newModels[brand]) newModels[brand] = {};
+            if (!newModels[brand][category]) newModels[brand][category] = [];
+            if (!newModels[brand][category].includes(modelName)) {
+                newModels[brand][category] = [...newModels[brand][category], modelName];
+            }
+            return { ...prev, models: newModels };
+        });
+    };
+
+    const deleteModel = (brand, category, modelName) => {
+        setRepairData(prev => {
+            const newModels = { ...prev.models };
+            if (newModels[brand] && newModels[brand][category]) {
+                newModels[brand][category] = newModels[brand][category].filter(m => m !== modelName);
+            }
+            return { ...prev, models: newModels };
+        });
+    };
+
+    const addRepairAction = (repair) => {
+        setRepairData(prev => ({
+            ...prev,
+            repairs: [...prev.repairs, { id: Date.now().toString(), name: repair }]
+        }));
+    };
+
+    const deleteRepairAction = (id) => {
+        setRepairData(prev => ({
+            ...prev,
+            repairs: prev.repairs.filter(r => r.id !== id)
+        }));
+    };
+
+    const toggleAdmin = () => setIsAdmin(!isAdmin);
+    const toggleEditMode = () => setEditMode(!editMode);
+
+    return (
+        <AdminContext.Provider value={{
+            isAdmin, toggleAdmin,
+            editMode, toggleEditMode,
+            siteContent, updateContent, updateSectionOrder,
+            repairData, addBrand, deleteBrand, addModel, deleteModel, addRepairAction, deleteRepairAction,
+            availability, addTimeSlot, removeTimeSlot, toggleDateAvailability, setCustomTimeSlots, getAvailableTimeSlots, isDateAvailable
+        }}>
+            {children}
+        </AdminContext.Provider>
+    );
+};
+
+export const useAdmin = () => useContext(AdminContext);

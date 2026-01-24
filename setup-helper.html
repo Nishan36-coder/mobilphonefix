@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3Forms Setup Helper - Mobilphonefix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        
+        .step-content {
+            color: #555;
+            line-height: 1.6;
+            margin-left: 40px;
+        }
+        
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+        
+        .copy-btn:hover {
+            background: #218838;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Web3Forms Setup Helper</h1>
+        <p class="subtitle">Get your FREE access key in 3 simple steps</p>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Go to Web3Forms
+            </div>
+            <div class="step-content">
+                <p>Click the button below to open Web3Forms in a new tab:</p>
+                <a href="https://web3forms.com/" target="_blank" class="button">
+                    Open Web3Forms →
+                </a>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                Create Your Access Key
+            </div>
+            <div class="step-content">
+                <p>On the Web3Forms website:</p>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>Enter your email: <span class="highlight">mobilphonefix@gmail.com</span></li>
+                    <li>Click "Create Access Key"</li>
+                    <li>Check your email for the verification link</li>
+                    <li>Click the verification link</li>
+                    <li>Copy your Access Key</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                Save Your Access Key
+            </div>
+            <div class="step-content">
+                <div class="input-group">
+                    <label for="accessKey">Paste Your Access Key Here:</label>
+                    <input 
+                        type="text" 
+                        id="accessKey" 
+                        placeholder="a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+                    >
+                </div>
+                <button class="button" onclick="generateEnvFile()">
+                    Generate .env.local File
+                </button>
+            </div>
+        </div>
+        
+        <div id="result" style="display: none; margin-top: 30px;">
+            <div class="step success">
+                <div class="step-title">
+                    ✅ Success! Your Configuration is Ready
+                </div>
+                <div class="step-content">
+                    <p><strong>Copy this content to your .env.local file:</strong></p>
+                    <div class="code-box" id="envContent"></div>
+                    <button class="button copy-btn" onclick="copyToClipboard()">
+                        📋 Copy to Clipboard
+                    </button>
+                    
+                    <p style="margin-top: 20px;"><strong>Next Steps:</strong></p>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Create a file named <code>.env.local</code> in your project folder</li>
+                        <li>Paste the content above into that file</li>
+                        <li>Save the file</li>
+                        <li>Restart your dev server (Ctrl+C, then npm run dev)</li>
+                        <li>Test your website! 🎉</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function generateEnvFile() {
+            const accessKey = document.getElementById('accessKey').value.trim();
+            
+            if (!accessKey) {
+                alert('Please paste your Web3Forms access key first!');
+                return;
+            }
+            
+            const envContent = `VITE_WEB3FORMS_ACCESS_KEY=${accessKey}`;
+            
+            document.getElementById('envContent').textContent = envContent;
+            document.getElementById('result').style.display = 'block';
+            
+            // Scroll to result
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function copyToClipboard() {
+            const content = document.getElementById('envContent').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy. Please copy manually.');
+            });
+        }
+    </script>
+</body>
+</html>
