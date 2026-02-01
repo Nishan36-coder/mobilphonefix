@@ -1,5 +1,5 @@
 import React from 'react';
-import { Smartphone, Tablet, Watch, Laptop } from 'lucide-react';
+import { Smartphone, Tablet, Watch, Laptop, Instagram, Facebook, Youtube } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 import { useLanguage } from '../context/LanguageContext';
@@ -45,6 +45,18 @@ const Footer = ({ onNavigate }) => {
         <div className="footer-brand">
           <h2 className="footer-logo">Mobilphonefix</h2>
           <p className="footer-tagline">{t('footer_tagline')}</p>
+
+          <div className="social-icons">
+            <a href="https://www.instagram.com/mr.techniician?igsh=enp5YnZ2ZXJtOGow&utm_source=qr" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
+              <Instagram size={24} />
+            </a>
+            <a href="https://www.facebook.com/share/1DqaSVcuKm/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
+              <Facebook size={24} />
+            </a>
+            <a href="https://youtube.com/@mr.techniician?si=fNZWrrK4aKEffXfX" target="_blank" rel="noopener noreferrer" className="social-icon youtube">
+              <Youtube size={24} />
+            </a>
+          </div>
         </div>
         <div className="footer-links">
           <div className="link-group">

@@ -26,8 +26,8 @@ export const translations = {
         service_find_model_desc: 'Not sure which model you have? Let us help you identify it.',
         service_laptop_desc: 'Keyboard, screen, and battery support for MacBooks and top PC brands.',
         btn_select: 'Select',
-        benefit_warranty: 'Lifetime Warranty',
-        benefit_warranty_desc: 'Our commitment to quality means your repair is covered for as long as you own the device.',
+        benefit_warranty: '30 Day Warranty',
+        benefit_warranty_desc: 'Our commitment to quality means your repair is covered for 30 days after service.',
         benefit_parts: 'Original Parts',
         benefit_parts_desc: 'We use high-quality, genuine parts to ensure your device performs like new.',
         benefit_techs: 'Certified Techs',
@@ -87,7 +87,7 @@ export const translations = {
         btn_booking: 'Booking...',
         summary_device: 'Device:',
         summary_repair: 'Repair:',
-        guarantee_text: 'Lifetime Warranty Guaranteed',
+        guarantee_text: '30 Day Warranty Guaranteed',
         btn_change_selection: 'Change Device/Repair',
 
         // Success
@@ -133,8 +133,8 @@ export const translations = {
         service_find_model_desc: '¿No está seguro de qué modelo tiene? Déjenos ayudarle a identificarlo.',
         service_laptop_desc: 'Soporte de teclado, pantalla y batería para MacBooks y principales marcas de PC.',
         btn_select: 'Seleccionar',
-        benefit_warranty: 'Garantía de Por Vida',
-        benefit_warranty_desc: 'Nuestro compromiso con la calidad significa que su reparación está cubierta mientras tenga el dispositivo.',
+        benefit_warranty: 'Garantía de 30 Días',
+        benefit_warranty_desc: 'Nuestro compromiso con la calidad significa que su reparación está cubierta por 30 días después del servicio.',
         benefit_parts: 'Piezas Originales',
         benefit_parts_desc: 'Utilizamos piezas genuinas de alta calidad para asegurar que su dispositivo funcione como nuevo.',
         benefit_techs: 'Técnicos Certificados',
@@ -194,7 +194,7 @@ export const translations = {
         btn_booking: 'Reservando...',
         summary_device: 'Dispositivo:',
         summary_repair: 'Reparación:',
-        guarantee_text: 'Garantía de Por Vida Garantizada',
+        guarantee_text: 'Garantía de 30 Días Garantizada',
         btn_change_selection: 'Cambiar Dispositivo/Reparación',
 
         // Success

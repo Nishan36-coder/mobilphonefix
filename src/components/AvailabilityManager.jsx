@@ -247,6 +247,7 @@ const AvailabilityManager = ({ onClose }) => {
                     align-items: center;
                     padding: 0.75rem 1rem;
                     border-bottom: 1px solid #edf2f7;
+                    color: #333;
                 }
                 .slot-item:last-child { border-bottom: none; }
                 

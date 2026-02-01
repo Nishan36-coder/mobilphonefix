@@ -1,7 +1,7 @@
 export const CATEGORIES = [
+    { id: 'find_model', name: 'Find Model', icon: 'HelpCircle' },
     { id: 'smartphone', name: 'Smartphone', icon: 'Smartphone' },
     { id: 'tablet', name: 'Tablet', icon: 'Tablet' },
-    { id: 'find_model', name: 'Find Model', icon: 'HelpCircle' },
     { id: 'laptop', name: 'Laptop', icon: 'Laptop' },
 ];
 

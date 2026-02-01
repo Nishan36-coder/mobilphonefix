@@ -12,6 +12,10 @@ export const sendInquirySMS = async (inquiryData) => {
     // Web3Forms endpoint
     const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'YOUR_WEB3FORMS_KEY';
 
+    if (accessKey === 'YOUR_WEB3FORMS_KEY') {
+        throw new Error('System Configuration Error: Web3Forms Access Key is not configured.');
+    }
+
     // Format the inquiry message
     const formData = new FormData();
     formData.append('access_key', accessKey);
@@ -19,7 +23,12 @@ export const sendInquirySMS = async (inquiryData) => {
     formData.append('from_name', 'Mobilphonefix Website');
     formData.append('name', name);
     formData.append('phone', phone);
-    formData.append('email', email || 'Not provided');
+
+    // Only append 'email' field if it is provided, to avoid validation errors
+    if (email && email.includes('@')) {
+        formData.append('email', email);
+    }
+
     formData.append('device', `${brand} ${model}`);
     formData.append('repair', repair);
 
@@ -70,13 +79,22 @@ export const sendAppointmentEmailViaBackend = async (appointmentData) => {
     // Web3Forms endpoint
     const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'YOUR_WEB3FORMS_KEY';
 
+    if (accessKey === 'YOUR_WEB3FORMS_KEY') {
+        throw new Error('System Configuration Error: Web3Forms Access Key is not configured.');
+    }
+
     const formData = new FormData();
     formData.append('access_key', accessKey);
     formData.append('subject', `📅 New Appointment Request - ${brand} ${model}`);
     formData.append('from_name', 'Mobilphonefix Website');
     formData.append('name', name);
     formData.append('phone', phone);
-    formData.append('email', email || 'Not provided');
+
+    // Only append 'email' field if it is provided, to avoid validation errors
+    if (email && email.includes('@')) {
+        formData.append('email', email);
+    }
+
     formData.append('address', address);
     formData.append('date', date);
     formData.append('time', time);

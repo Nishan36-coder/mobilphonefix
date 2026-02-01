@@ -47,16 +47,90 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
     time: '9:00 AM - 11:00 AM'
   });
 
-  // ... (useEffect remains the same)
+  useEffect(() => {
+    if (initialCategory) {
+      const isSearchMode = !!initialSearch;
 
-  // ... (handlers remain the same)
+      setSelection(prev => ({
+        ...prev,
+        category: initialCategory,
+        // Reset fields but keep search if present
+        brand: '',
+        model: '',
+        repair: ''
+      }));
+      setSearchTerm(initialSearch || '');
+
+      // If user searched, aim for Model Selection (Step 3) if possible, or Brand (Step 2)
+      // The user requested: "take them directly to the select model option"
+      if (isSearchMode) {
+        setStep(3); // Jump to Model Selection
+        // potentially need to set a default brand if step 3 requires it, 
+        // but step 3 in this code lists models based on brand. 
+        // If brand is empty, step 3 might show nothing or all models?
+        // Let's check step 3 logic. It filters models based on selection.brand.
+        // If selection.brand is empty, we must ensure Step 3 handles it or we default to a "Search All Models" view.
+        // For now, let's assume valid search flow involves picking a brand first in standard flow, 
+        // but to support "Search for iPhone 13", we might need to be smarter.
+        // IF we force Step 3, we need a brand. 
+        // Let's stick to user request: "select model option". 
+        // If I search "iPhone", I want to see iPhone models. 
+        // This implies we should defaulting brand to "Apple" if search contains "iPhone"?
+        // Or we can modify Step 3 to show ALL models if brand is empty?
+        // Let's just set Step 2 (Brand) for general search, OR Step 3 if we can guess brand.
+
+        // REVISION based on user request "take directly to select model option":
+        // We will set Brand to "Apple" and Step 3 if search is "iPhone". 
+        // Otherwise, we default to Step 2 so they pick a brand.
+        // Actually, let's try to be generic: 
+        if (initialSearch && initialSearch.toLowerCase().includes('iphone')) {
+          setSelection(prev => ({ ...prev, category: 'smartphone', brand: 'Apple', model: '' }));
+          setStep(3);
+        } else if (initialSearch && initialSearch.toLowerCase().includes('samsung')) {
+          setSelection(prev => ({ ...prev, category: 'smartphone', brand: 'Samsung', model: '' }));
+          setStep(3);
+        } else {
+          setStep(2); // Fallback to brand selection if we can't guess
+        }
+      } else {
+        setStep(2);
+      }
+    }
+  }, [initialCategory, initialSearch]);
+
+  const handleReset = () => {
+    // 1. Reset Internal State
+    setStep(1);
+    setSearchTerm('');
+    setSelection({
+      category: '',
+      brand: '',
+      model: '',
+      repair: '',
+      name: '',
+      phone: '',
+      email: '',
+      address: '',
+      date: '',
+      time: '9:00 AM - 11:00 AM'
+    });
+    setIdentifyTab('ios');
+    setIsSubmitting(false);
+
+    // 2. Notify Parent
+    if (onReset) {
+      onReset();
+    }
+
+    // 3. Scroll to top (optional, but good UX)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleNext = () => setStep(step + 1);
   const handleBack = () => {
     if (step === 1) return;
     setStep(step - 1);
   };
-
-  // ... Handle Reset / Submit
 
   // Validation and Submission
   const handleSubmit = async (type) => {
@@ -113,16 +187,12 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
     } catch (error) {
       console.error('❌ Error submitting request:', error);
       setIsSubmitting(false);
-      alert(`There was an error submitting your ${type}. Please try again or contact us directly at +1 (227) 259-7780.`);
+      alert(`There was an error submitting your ${type}: ${error.message}\n\nPlease try again or contact us directly at +1 (227) 259-7780.`);
     }
   };
 
   // Handle Reset - Return to home
-  const handleReset = () => {
-    if (onReset) {
-      onReset();
-    }
-  };
+
 
   const filteredBrands = selection.category
     ? (getBrandsForCategory(selection.category).filter(b => b.toLowerCase().includes(searchTerm.toLowerCase())))

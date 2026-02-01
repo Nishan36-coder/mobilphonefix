@@ -137,8 +137,11 @@ export const AdminProvider = ({ children }) => {
     const addModel = (brand, category, modelName) => {
         setRepairData(prev => {
             const newModels = { ...prev.models };
-            if (!newModels[brand]) newModels[brand] = {};
+            // Deep copy the brand object to avoid mutation
+            newModels[brand] = { ...newModels[brand] } || {};
+
             if (!newModels[brand][category]) newModels[brand][category] = [];
+
             if (!newModels[brand][category].includes(modelName)) {
                 newModels[brand][category] = [...newModels[brand][category], modelName];
             }
@@ -150,6 +153,8 @@ export const AdminProvider = ({ children }) => {
         setRepairData(prev => {
             const newModels = { ...prev.models };
             if (newModels[brand] && newModels[brand][category]) {
+                // Deep copy before modifying
+                newModels[brand] = { ...newModels[brand] };
                 newModels[brand][category] = newModels[brand][category].filter(m => m !== modelName);
             }
             return { ...prev, models: newModels };

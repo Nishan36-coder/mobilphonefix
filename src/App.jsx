@@ -10,6 +10,7 @@ import { AdminProvider, useAdmin } from './context/AdminContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { Move } from 'lucide-react'
 import './App.css'
+import './social-icons.css'
 
 function AppContent() {
     const [selectedCategory, setSelectedCategory] = useState(null)
