@@ -760,3 +760,10 @@ html {
         transform: rotate(360deg);
     }
 }
+.footer-logo-img {
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 1.5rem;
+    display: block;
+    max-width: 100%;
+}

@@ -8,6 +8,9 @@ const Header = ({ onNavigate }) => {
   return (
     <header className="header">
       <div className="container header-content">
+        <div className="header-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ cursor: 'pointer' }}>
+          <img src="/logo.png" alt="Mobilphonefix" style={{ height: '60px', objectFit: 'contain' }} />
+        </div>
         <div className="nav-links" style={{ display: 'flex', gap: '2rem' }}>
           <a href="#services" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: '500' }}>{t('nav_services')}</a>
           <a href="#how-it-works" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: '500', scrollBehavior: 'smooth' }}>{t('nav_how_it_works')}</a>

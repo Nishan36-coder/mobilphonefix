@@ -43,7 +43,7 @@ const Footer = ({ onNavigate }) => {
     <footer className="footer">
       <div className="container footer-content">
         <div className="footer-brand">
-          <h2 className="footer-logo">Mobilphonefix</h2>
+          <img src="/logo.png" alt="Mobilphonefix" className="footer-logo-img" />
           <p className="footer-tagline">{t('footer_tagline')}</p>
 
           <div className="social-icons">
