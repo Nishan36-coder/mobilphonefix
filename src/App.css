@@ -57,12 +57,26 @@ html {
 
 @media (max-width: 768px) {
     .header-logo-img {
-        height: 80px;
+        height: 60px;
+        /* Reduced height for better fit */
+        max-width: 180px;
+        /* Constrain width */
     }
 
     .availability,
     .nav-links {
         display: none;
+    }
+
+    .header-info {
+        gap: 0.5rem;
+        /* Reduce gap */
+    }
+
+    .phone-btn {
+        padding: 0.5rem 0.75rem;
+        /* More compact button */
+        font-size: 0.8rem;
     }
 }
 
