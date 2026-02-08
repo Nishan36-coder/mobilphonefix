@@ -37,6 +37,7 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
   const [selection, setSelection] = useState({
     category: '',
     brand: '',
+    modelSeries: '', // NEW: for hierarchical models (e.g., "Galaxy S Series")
     model: '',
     repair: '',
     name: '',
@@ -303,12 +304,93 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
           </div>
         );
       case 3:
-        // Use repairData for specific models, or empty if models is undefined
-        const models = (repairData?.models?.[selection.brand]?.[selection.category]) || [];
+        // Get models - could be flat array or hierarchical object
+        const modelsData = (repairData?.models?.[selection.brand]?.[selection.category]) || [];
+        const isHierarchical = typeof modelsData === 'object' && !Array.isArray(modelsData);
+
+        // If hierarchical and no series selected yet, show series selection
+        if (isHierarchical && !selection.modelSeries) {
+          const series = Object.keys(modelsData);
+          return (
+            <div className="step-fade">
+              <h3>{t('step_model')}</h3>
+              <p style={{ color: '#718096', marginBottom: '2rem' }}>Select a model series</p>
+              <div className="search-list">
+                {series.map(s => (
+                  <button
+                    key={s}
+                    className="list-item"
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    onClick={() => {
+                      setSelection({ ...selection, modelSeries: s });
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                      {s} <ChevronRight size={18} />
+                    </span>
+                    {editMode && (
+                      <button
+                        className="admin-delete-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Delete entire series
+                          const updatedModels = { ...modelsData };
+                          delete updatedModels[s];
+                          // Update in context (you'll need to add this function)
+                          console.log('Delete series:', s);
+                        }}
+                        style={{ marginLeft: '1rem' }}
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
+                  </button>
+                ))}
+                {editMode && (
+                  <div className="admin-add-item">
+                    <input
+                      type="text"
+                      placeholder="Add new series (e.g., Galaxy M Series)..."
+                      value={newModelName}
+                      onChange={(e) => setNewModelName(e.target.value)}
+                    />
+                    <button
+                      className="btn-primary"
+                      onClick={() => {
+                        if (newModelName.trim()) {
+                          // Add new series with empty array
+                          addModel(selection.brand, selection.category, newModelName, true);
+                          setNewModelName('');
+                        }
+                      }}
+                    >
+                      <Plus size={18} />
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div style={{ marginTop: '2rem' }}>
+                <button className="back-link" onClick={handleBack}><ArrowLeft size={16} /> Back</button>
+              </div>
+            </div>
+          );
+        }
+
+        // Show models within selected series (or all models if flat structure)
+        const models = isHierarchical && selection.modelSeries
+          ? modelsData[selection.modelSeries] || []
+          : (Array.isArray(modelsData) ? modelsData : []);
+
         const filteredModels = models.filter(m => m.toLowerCase().includes(searchTerm.toLowerCase()));
+
         return (
           <div className="step-fade">
             <h3>{t('step_model')}</h3>
+            {isHierarchical && selection.modelSeries && (
+              <p style={{ color: '#718096', marginBottom: '1rem' }}>
+                {selection.modelSeries}
+              </p>
+            )}
             <div className="search-container" style={{ marginBottom: '1.5rem' }}>
               <div className="search-input-wrapper">
                 <Search size={18} className="search-icon" />
@@ -339,7 +421,14 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
                   {editMode && (
                     <button
                       className="admin-delete-btn"
-                      onClick={(e) => { e.stopPropagation(); deleteModel(selection.brand, selection.category, m); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isHierarchical && selection.modelSeries) {
+                          deleteModel(selection.brand, selection.category, m, selection.modelSeries);
+                        } else {
+                          deleteModel(selection.brand, selection.category, m);
+                        }
+                      }}
                       style={{ marginLeft: '1rem' }}
                     >
                       <X size={16} />
@@ -351,18 +440,40 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
                 <div className="admin-add-item">
                   <input
                     type="text"
-                    placeholder="Add new model..."
+                    placeholder={isHierarchical && selection.modelSeries ? `Add model to ${selection.modelSeries}...` : "Add new model..."}
                     value={newModelName}
                     onChange={(e) => setNewModelName(e.target.value)}
                   />
-                  <button className="btn-primary" onClick={() => { addModel(selection.brand, selection.category, newModelName); setNewModelName(''); }}>
+                  <button
+                    className="btn-primary"
+                    onClick={() => {
+                      if (isHierarchical && selection.modelSeries) {
+                        addModel(selection.brand, selection.category, newModelName, false, selection.modelSeries);
+                      } else {
+                        addModel(selection.brand, selection.category, newModelName);
+                      }
+                      setNewModelName('');
+                    }}
+                  >
                     <Plus size={18} />
                   </button>
                 </div>
               )}
             </div>
             <div style={{ marginTop: '2rem' }}>
-              <button className="back-link" onClick={handleBack}><ArrowLeft size={16} /> Back</button>
+              <button
+                className="back-link"
+                onClick={() => {
+                  if (isHierarchical && selection.modelSeries) {
+                    // Go back to series selection
+                    setSelection({ ...selection, modelSeries: '' });
+                  } else {
+                    handleBack();
+                  }
+                }}
+              >
+                <ArrowLeft size={16} /> Back
+              </button>
             </div>
           </div>
         );

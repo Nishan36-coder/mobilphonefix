@@ -22,7 +22,7 @@ export const AdminProvider = ({ children }) => {
 
     // Repair Data State
     const [repairData, setRepairData] = useState(() => {
-        const saved = localStorage.getItem('repair_data_v3');
+        const saved = localStorage.getItem('repair_data_v4'); // Changed from v3 to v4 for hierarchical models
         return saved ? JSON.parse(saved) : {
             brands: BRANDS,
             models: MODELS,
@@ -51,7 +51,7 @@ export const AdminProvider = ({ children }) => {
     }, [siteContent]);
 
     useEffect(() => {
-        localStorage.setItem('repair_data_v3', JSON.stringify(repairData));
+        localStorage.setItem('repair_data_v4', JSON.stringify(repairData));
     }, [repairData]);
 
     useEffect(() => {
@@ -134,28 +134,66 @@ export const AdminProvider = ({ children }) => {
         });
     };
 
-    const addModel = (brand, category, modelName) => {
+    const addModel = (brand, category, modelName, isNewSeries = false, seriesName = null) => {
         setRepairData(prev => {
             const newModels = { ...prev.models };
             // Deep copy the brand object to avoid mutation
             newModels[brand] = { ...newModels[brand] } || {};
 
-            if (!newModels[brand][category]) newModels[brand][category] = [];
+            // Check if current structure is hierarchical
+            const currentData = newModels[brand][category];
+            const isHierarchical = currentData && typeof currentData === 'object' && !Array.isArray(currentData);
 
-            if (!newModels[brand][category].includes(modelName)) {
-                newModels[brand][category] = [...newModels[brand][category], modelName];
+            if (isNewSeries) {
+                // Adding a new series (e.g., "Galaxy M Series")
+                if (!isHierarchical) {
+                    // Convert to hierarchical if not already
+                    newModels[brand][category] = {};
+                }
+                newModels[brand][category] = { ...newModels[brand][category] };
+                if (!newModels[brand][category][modelName]) {
+                    newModels[brand][category][modelName] = [];
+                }
+            } else if (seriesName) {
+                // Adding a model to a specific series
+                newModels[brand][category] = { ...newModels[brand][category] };
+                if (!newModels[brand][category][seriesName]) {
+                    newModels[brand][category][seriesName] = [];
+                }
+                if (!newModels[brand][category][seriesName].includes(modelName)) {
+                    newModels[brand][category][seriesName] = [...newModels[brand][category][seriesName], modelName];
+                }
+            } else {
+                // Adding to flat array structure
+                if (!newModels[brand][category]) newModels[brand][category] = [];
+                if (!newModels[brand][category].includes(modelName)) {
+                    newModels[brand][category] = [...newModels[brand][category], modelName];
+                }
             }
             return { ...prev, models: newModels };
         });
     };
 
-    const deleteModel = (brand, category, modelName) => {
+    const deleteModel = (brand, category, modelName, seriesName = null) => {
         setRepairData(prev => {
             const newModels = { ...prev.models };
             if (newModels[brand] && newModels[brand][category]) {
                 // Deep copy before modifying
                 newModels[brand] = { ...newModels[brand] };
-                newModels[brand][category] = newModels[brand][category].filter(m => m !== modelName);
+
+                const currentData = newModels[brand][category];
+                const isHierarchical = typeof currentData === 'object' && !Array.isArray(currentData);
+
+                if (isHierarchical && seriesName) {
+                    // Delete from specific series
+                    newModels[brand][category] = { ...newModels[brand][category] };
+                    if (newModels[brand][category][seriesName]) {
+                        newModels[brand][category][seriesName] = newModels[brand][category][seriesName].filter(m => m !== modelName);
+                    }
+                } else if (Array.isArray(currentData)) {
+                    // Delete from flat array
+                    newModels[brand][category] = newModels[brand][category].filter(m => m !== modelName);
+                }
             }
             return { ...prev, models: newModels };
         });

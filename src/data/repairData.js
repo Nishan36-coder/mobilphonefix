@@ -49,14 +49,34 @@ export const MODELS = {
         ]
     },
     Samsung: {
-        smartphone: [
-            'Galaxy S24 Ultra', 'Galaxy S24+', 'Galaxy S24',
-            'Galaxy S23 Ultra', 'Galaxy S23+', 'Galaxy S23',
-            'Galaxy Z Fold 5', 'Galaxy Z Flip 5',
-            'Galaxy S22 Ultra', 'Galaxy S22+', 'Galaxy S22',
-            'Galaxy S21 Ultra', 'Galaxy S21+', 'Galaxy S21FE', 'Galaxy S21',
-            'Galaxy Note 20 Ultra', 'Galaxy Note 20'
-        ],
+        smartphone: {
+            'Galaxy S Series': [
+                'Galaxy S24 Ultra', 'Galaxy S24+', 'Galaxy S24',
+                'Galaxy S23 Ultra', 'Galaxy S23+', 'Galaxy S23',
+                'Galaxy S22 Ultra', 'Galaxy S22+', 'Galaxy S22',
+                'Galaxy S21 Ultra', 'Galaxy S21+', 'Galaxy S21 FE', 'Galaxy S21',
+                'Galaxy S20 Ultra', 'Galaxy S20+', 'Galaxy S20',
+                'Galaxy S10+', 'Galaxy S10', 'Galaxy S10e'
+            ],
+            'Galaxy Z Series': [
+                'Galaxy Z Fold 6', 'Galaxy Z Flip 6',
+                'Galaxy Z Fold 5', 'Galaxy Z Flip 5',
+                'Galaxy Z Fold 4', 'Galaxy Z Flip 4',
+                'Galaxy Z Fold 3', 'Galaxy Z Flip 3',
+                'Galaxy Z Fold 2', 'Galaxy Z Flip'
+            ],
+            'Galaxy Note Series': [
+                'Galaxy Note 20 Ultra', 'Galaxy Note 20',
+                'Galaxy Note 10+', 'Galaxy Note 10',
+                'Galaxy Note 9', 'Galaxy Note 8'
+            ],
+            'Galaxy A Series': [
+                'Galaxy A54', 'Galaxy A53', 'Galaxy A52',
+                'Galaxy A34', 'Galaxy A33', 'Galaxy A32',
+                'Galaxy A24', 'Galaxy A23', 'Galaxy A22',
+                'Galaxy A14', 'Galaxy A13', 'Galaxy A12'
+            ]
+        },
         tablet: [
             'Galaxy Tab S9 Ultra', 'Galaxy Tab S9+', 'Galaxy Tab S9',
             'Galaxy Tab S8 Ultra', 'Galaxy Tab S8+', 'Galaxy Tab S8',
@@ -98,7 +118,12 @@ export const REPAIRS = [
 
 export const getModels = (brand, category) => {
     if (MODELS[brand] && MODELS[brand][category]) {
-        return MODELS[brand][category];
+        const models = MODELS[brand][category];
+        // Check if it's a hierarchical structure (object with series)
+        if (typeof models === 'object' && !Array.isArray(models)) {
+            return models; // Return the hierarchical object
+        }
+        return models; // Return flat array
     }
     // Generic models for brands not explicitly defined
     return [
@@ -107,3 +132,10 @@ export const getModels = (brand, category) => {
         'Other Model'
     ];
 };
+
+// Helper function to check if models are hierarchical
+export const isHierarchical = (brand, category) => {
+    const models = MODELS[brand]?.[category];
+    return models && typeof models === 'object' && !Array.isArray(models);
+};
+
