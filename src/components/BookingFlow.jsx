@@ -199,17 +199,17 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
     : [];
 
   const icons = {
-    smartphone: <Smartphone />,
-    tablet: <Tablet />,
+    smartphone: <Smartphone size={48} />,
+    tablet: <Tablet size={48} />,
     find_model: (
       <div style={{ position: 'relative', display: 'inline-block' }}>
-        <Smartphone />
-        <div style={{ position: 'absolute', bottom: -5, right: -5, background: 'var(--accent)', borderRadius: '50%', padding: 2, color: 'white' }}>
-          <HelpCircle size={10} />
+        <Smartphone size={48} />
+        <div style={{ position: 'absolute', bottom: -5, right: -5, background: 'var(--accent)', borderRadius: '50%', padding: 4, color: 'white' }}>
+          <HelpCircle size={20} />
         </div>
       </div>
     ),
-    laptop: <Laptop />
+    laptop: <Laptop size={48} />
   };
 
   const renderStep = () => {

@@ -44,7 +44,7 @@ const Footer = ({ onNavigate }) => {
       <div className="container footer-content">
         <div className="footer-brand">
           <img src="/logo.png" alt="Mobilphonefix" className="footer-logo-img" />
-          <p className="footer-tagline">{t('footer_tagline')}</p>
+          <p className="footer-tagline" style={{ color: '#4a5568' }}>{t('footer_tagline')}</p>
 
           <div className="social-icons">
             <a href="https://www.instagram.com/mr.techniician?igsh=enp5YnZ2ZXJtOGow&utm_source=qr" target="_blank" rel="noopener noreferrer" className="social-icon instagram">

@@ -7,9 +7,28 @@ html {
 /* Header */
 .header {
     padding: 1.25rem 0;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--bg-dark);
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
     z-index: 100;
+}
+
+.nav-links a {
+    color: #1a202c;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.header .availability {
+    color: #4a5568;
+}
+
+.header-logo-img {
+    height: 180px;
+    object-fit: contain;
+    display: block;
 }
 
 .header-content {
@@ -37,7 +56,12 @@ html {
 }
 
 @media (max-width: 768px) {
-    .availability {
+    .header-logo-img {
+        height: 80px;
+    }
+
+    .availability,
+    .nav-links {
         display: none;
     }
 }
@@ -54,6 +78,8 @@ html {
     line-height: 1.1;
     margin-bottom: 1.5rem;
     letter-spacing: -0.03em;
+    color: white;
+    /* Ensure title is white on dark hero bg */
 }
 
 .underline {
@@ -330,7 +356,12 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.category-card span {
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .category-card:hover {
@@ -342,11 +373,24 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     width: 100%;
+    font-size: 1.25rem;
+    /* Larger font size */
+    font-weight: 600;
+    /* Bolder text */
+    color: #2d3748;
+    /* Darker for visibility */
+    transition: all 0.2s ease;
+}
+
+.list-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    background: white;
 }
 
 .finalize-grid {
@@ -381,7 +425,8 @@ html {
     padding: 2rem;
     border-radius: 16px;
     border: 1px solid #e2e8f0;
-    sticky: top 100px;
+    position: sticky;
+    top: 100px;
 }
 
 .category-tag-btn {
@@ -437,10 +482,10 @@ html {
 
 .booking-container .search-input {
     width: 100%;
-    padding: 0.75rem;
+    padding: 1rem;
     border: none;
     background: transparent;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: #1a202c;
     /* Ensure text is visible on light background */
 }
@@ -491,15 +536,15 @@ html {
 /* Footer */
 .footer {
     padding: 5rem 0 0;
-    background: #05070a;
-    border-top: 1px solid var(--border-color);
+    background: white;
+    border-top: 1px solid #e2e8f0;
 }
 
 .footer-bottom {
     padding: 3rem 0;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid #e2e8f0;
     text-align: center;
-    color: var(--text-muted);
+    color: #4a5568;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.3s;
@@ -507,8 +552,8 @@ html {
 }
 
 .footer-bottom:hover {
-    background: rgba(255, 255, 255, 0.03);
-    color: rgba(255, 255, 255, 0.9);
+    background: #f7fafc;
+    color: #1a202c;
 }
 
 .footer-bottom:active {
@@ -527,7 +572,7 @@ html {
 }
 
 .footer-links .link-group h4 {
-    color: white;
+    color: #1a202c;
     margin-bottom: 1rem;
     font-size: 1rem;
 }
@@ -544,7 +589,7 @@ html {
 
 .footer-links .link-group a,
 .footer-links .link-group .btn-text {
-    color: var(--text-muted);
+    color: #4a5568;
     text-decoration: none;
     transition: color 0.2s;
     display: inline-flex;
@@ -554,7 +599,7 @@ html {
 
 .footer-links .link-group a:hover,
 .footer-links .link-group .btn-text:hover {
-    color: white;
+    color: var(--accent);
 }
 
 @media (max-width: 768px) {
@@ -760,10 +805,17 @@ html {
         transform: rotate(360deg);
     }
 }
+
 .footer-logo-img {
-    height: 120px;
+    height: 150px;
     object-fit: contain;
     margin-bottom: 1.5rem;
     display: block;
     max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .footer-logo-img {
+        height: 100px;
+    }
 }
