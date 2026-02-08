@@ -11,7 +11,7 @@ const Header = ({ onNavigate }) => {
         <div className="header-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ cursor: 'pointer' }}>
           <img src="/logo.png" alt="Mobilphonefix" className="header-logo-img" />
         </div>
-        <div className="nav-links" style={{ display: 'flex', gap: '2rem' }}>
+        <div className="nav-links">
           <a href="#services" style={{ textDecoration: 'none', fontWeight: '500' }}>{t('nav_services')}</a>
           <a href="#how-it-works" style={{ textDecoration: 'none', fontWeight: '500', scrollBehavior: 'smooth' }}>{t('nav_how_it_works')}</a>
           <a href="#booking" style={{ textDecoration: 'none', fontWeight: '500' }}>{t('nav_book')}</a>
