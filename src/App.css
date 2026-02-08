@@ -27,16 +27,7 @@ html {
     color: var(--accent);
 }
 
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: #1a202c;
-    padding: 0.25rem;
-    cursor: pointer;
-}
-
-.mobile-menu-overlay {
+.mobile-subheader {
     display: none;
 }
 
@@ -80,14 +71,19 @@ html {
         max-width: 160px;
     }
 
+    .header {
+        padding-bottom: 0;
+        /* Subheader takes care of bottom spacing */
+    }
+
     .desktop-nav,
     .desktop-phone-btn {
         display: none !important;
     }
 
     .mobile-menu-btn {
-        display: flex;
-        align-items: center;
+        display: none;
+        /* Removed from JSX */
     }
 
     .header-info {
@@ -102,72 +98,42 @@ html {
         display: none;
     }
 
-    /* Mobile Menu Styles */
-    .mobile-menu-overlay {
+    /* Mobile Subheader Styles */
+    .mobile-subheader {
         display: block;
-        /* Show container if open logic logic handled by React conditional render */
-        position: fixed;
-        top: 86px;
-        /* Below header approx */
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 99;
-    }
-
-    .mobile-menu-content {
-        background: white;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        animation: slideDown 0.3s ease-out;
-    }
-
-    .mobile-menu-content a {
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #1a202c;
-        text-decoration: none;
-        padding: 0.5rem 0;
-    }
-
-    .mobile-divider {
-        height: 1px;
-        background: #e2e8f0;
-        margin: 0.5rem 0;
-    }
-
-    .mobile-availability {
-        font-size: 0.9rem;
-        color: var(--text-muted);
-        text-align: center;
-        background: #f7fafc;
-        padding: 0.75rem;
-        border-radius: 8px;
-    }
-
-    .mobile-phone-btn {
-        text-align: center;
         width: 100%;
-        display: block;
-        padding: 1rem;
-        font-size: 1.1rem;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        margin-top: 1rem;
+        padding: 0.75rem 0;
     }
 
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
+    .mobile-availability-banner {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .mobile-nav-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .mobile-nav-links a {
+        font-size: 0.95rem;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .mobile-nav-links a.highlight-link {
+        color: var(--accent);
+        font-weight: 600;
     }
 }
 

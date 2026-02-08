@@ -42,6 +42,18 @@ const Header = ({ onNavigate }) => {
         </div>
       </div>
 
+      {/* Mobile Sub-Header: Always visible navigation and availability */}
+      <div className="mobile-subheader">
+        <div className="container">
+          <div className="mobile-availability-banner">{t('header_availability')}</div>
+          <div className="mobile-nav-links">
+            <a href="#services">{t('nav_services')}</a>
+            <a href="#how-it-works">{t('nav_how_it_works')}</a>
+            <a href="#booking" className="highlight-link">{t('nav_book')}</a>
+          </div>
+        </div>
+      </div>
+
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div className="mobile-menu-overlay">
