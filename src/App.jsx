@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import BookingFlow from './components/BookingFlow'
 import Services from './components/Services'
 import HowItWorks from './components/HowItWorks'
+import GoogleReviews from './components/GoogleReviews'
 import Footer from './components/Footer'
 import AdminToolbar from './components/AdminToolbar'
 import { AdminProvider, useAdmin } from './context/AdminContext'
@@ -62,11 +63,21 @@ function AppContent() {
                 )}
                 <HowItWorks />
             </div>
+        ),
+        reviews: (
+            <div id="reviews" key="reviews" className={editMode ? 'admin-section' : ''}>
+                {editMode && (
+                    <div className="section-admin-controls">
+                        <div className="section-drag-handle"><Move size={16} /> Reviews Section</div>
+                    </div>
+                )}
+                <GoogleReviews />
+            </div>
         )
     };
 
     // Always show all sections - no deletion allowed
-    const activeOrder = ['home', 'booking', 'services', 'howItWorks'];
+    const activeOrder = ['home', 'booking', 'services', 'howItWorks', 'reviews'];
 
     return (
         <div className={`app ${editMode ? 'admin-mode-active' : ''}`}>

@@ -11,7 +11,7 @@ import { sendInquirySMS, sendAppointmentEmailViaBackend } from '../services/subm
 
 const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
   const { t } = useLanguage();
-  const { repairData, addBrand, deleteBrand, addModel, deleteModel, addRepairAction, deleteRepairAction, editMode, getAvailableTimeSlots } = useAdmin();
+  const { repairData, addBrand, deleteBrand, addModel, deleteModel, addRepairAction, deleteRepairAction, getRepairs, editMode, getAvailableTimeSlots } = useAdmin();
 
   // Robustly handle data source per category
   const getBrandsForCategory = (cat) => {
@@ -22,9 +22,6 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
     }
     return FallbackBrands[cat] || [];
   };
-
-  const MODELS = repairData?.models || {};
-  const REPAIRS = repairData?.repairs || [];
 
   const [step, setStep] = useState(1);
   const [identifyTab, setIdentifyTab] = useState('ios'); // 'ios' or 'android'
@@ -47,6 +44,9 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
     date: '',
     time: '9:00 AM - 11:00 AM'
   });
+
+  const MODELS = repairData?.models || {};
+  const currentRepairs = getRepairs(selection.category, selection.brand, selection.model);
 
   useEffect(() => {
     if (initialCategory) {
@@ -482,7 +482,7 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
           <div className="step-fade">
             <h3>{t('step_repair')}</h3>
             <div className="search-list repair-list">
-              {REPAIRS.map(r => (
+              {currentRepairs.map(r => (
                 <button
                   key={r.id}
                   className="list-item"
@@ -498,7 +498,7 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
                   {editMode && (
                     <button
                       className="admin-delete-btn"
-                      onClick={(e) => { e.stopPropagation(); deleteRepairAction(r.id); }}
+                      onClick={(e) => { e.stopPropagation(); deleteRepairAction(r.id, selection.category, selection.brand, selection.model); }}
                       style={{ marginLeft: '1rem' }}
                     >
                       <X size={16} />
@@ -514,7 +514,7 @@ const BookingFlow = ({ initialCategory, initialSearch, onReset }) => {
                     value={newRepairName}
                     onChange={(e) => setNewRepairName(e.target.value)}
                   />
-                  <button className="btn-primary" onClick={() => { addRepairAction(newRepairName); setNewRepairName(''); }}>
+                  <button className="btn-primary" onClick={() => { addRepairAction(newRepairName, selection.category, selection.brand, selection.model); setNewRepairName(''); }}>
                     <Plus size={18} />
                   </button>
                 </div>

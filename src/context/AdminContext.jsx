@@ -22,11 +22,23 @@ export const AdminProvider = ({ children }) => {
 
     // Repair Data State
     const [repairData, setRepairData] = useState(() => {
-        const saved = localStorage.getItem('repair_data_v4'); // Changed from v3 to v4 for hierarchical models
-        return saved ? JSON.parse(saved) : {
+        const savedV5 = localStorage.getItem('repair_data_v5');
+        if (savedV5) return JSON.parse(savedV5);
+
+        const savedV4 = localStorage.getItem('repair_data_v4');
+        if (savedV4) {
+            const data = JSON.parse(savedV4);
+            return {
+                ...data,
+                modelRepairs: data.modelRepairs || {}
+            };
+        }
+
+        return {
             brands: BRANDS,
             models: MODELS,
-            repairs: REPAIRS
+            repairs: REPAIRS,
+            modelRepairs: {} // { 'category_brand_model': [repair, ...] }
         };
     });
 
@@ -51,7 +63,7 @@ export const AdminProvider = ({ children }) => {
     }, [siteContent]);
 
     useEffect(() => {
-        localStorage.setItem('repair_data_v4', JSON.stringify(repairData));
+        localStorage.setItem('repair_data_v5', JSON.stringify(repairData));
     }, [repairData]);
 
     useEffect(() => {
@@ -199,18 +211,50 @@ export const AdminProvider = ({ children }) => {
         });
     };
 
-    const addRepairAction = (repair) => {
-        setRepairData(prev => ({
-            ...prev,
-            repairs: [...prev.repairs, { id: Date.now().toString(), name: repair }]
-        }));
+    const getRepairs = (category, brand, model) => {
+        const key = `${category}_${brand}_${model}`.replace(/\s+/g, '_');
+        if (repairData.modelRepairs && repairData.modelRepairs[key]) {
+            return repairData.modelRepairs[key];
+        }
+        return repairData.repairs || [];
     };
 
-    const deleteRepairAction = (id) => {
-        setRepairData(prev => ({
-            ...prev,
-            repairs: prev.repairs.filter(r => r.id !== id)
-        }));
+    const addRepairAction = (repair, category, brand, model) => {
+        const key = `${category}_${brand}_${model}`.replace(/\s+/g, '_');
+        setRepairData(prev => {
+            const currentRepairs = (prev.modelRepairs && prev.modelRepairs[key])
+                ? prev.modelRepairs[key]
+                : [...(prev.repairs || [])];
+
+            const newRepairs = [...currentRepairs, { id: Date.now().toString(), name: repair }];
+
+            return {
+                ...prev,
+                modelRepairs: {
+                    ...(prev.modelRepairs || {}),
+                    [key]: newRepairs
+                }
+            };
+        });
+    };
+
+    const deleteRepairAction = (id, category, brand, model) => {
+        const key = `${category}_${brand}_${model}`.replace(/\s+/g, '_');
+        setRepairData(prev => {
+            const currentRepairs = (prev.modelRepairs && prev.modelRepairs[key])
+                ? prev.modelRepairs[key]
+                : [...(prev.repairs || [])];
+
+            const newRepairs = currentRepairs.filter(r => r.id !== id);
+
+            return {
+                ...prev,
+                modelRepairs: {
+                    ...(prev.modelRepairs || {}),
+                    [key]: newRepairs
+                }
+            };
+        });
     };
 
     const toggleAdmin = () => setIsAdmin(!isAdmin);
@@ -221,7 +265,7 @@ export const AdminProvider = ({ children }) => {
             isAdmin, toggleAdmin,
             editMode, toggleEditMode,
             siteContent, updateContent, updateSectionOrder,
-            repairData, addBrand, deleteBrand, addModel, deleteModel, addRepairAction, deleteRepairAction,
+            repairData, addBrand, deleteBrand, addModel, deleteModel, addRepairAction, deleteRepairAction, getRepairs,
             availability, addTimeSlot, removeTimeSlot, toggleDateAvailability, setCustomTimeSlots, getAvailableTimeSlots, isDateAvailable
         }}>
             {children}
